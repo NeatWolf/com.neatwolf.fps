@@ -1,8 +1,8 @@
 {
-    "name": "com.neatwolf.spatial.editor",
-    "rootNamespace": "NeatWolf.Spatial.Editor",
+    "name": "com.neatwolf.fps.editor",
+    "rootNamespace": "NeatWolf.FPS.Editor",
     "references": [
-        "GUID:2a0b2573c344c84429369c27d1de0760"
+        "GUID:9c33d924e47365a46ae572946dc8a73d"
     ],
     "includePlatforms": [
         "Editor"
