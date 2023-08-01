@@ -5,57 +5,49 @@ namespace NeatWolf.FPS
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField]
-        float speed = 6f;
+        private PlayerInputHandler inputHandler;
 
         [SerializeField]
-        float jumpHeight = 3f;
+        private CharacterController controller;
 
         [SerializeField]
-        float gravity = -9.81f;
+        private float moveSpeed = 5f;
 
-        Vector3 velocity;
-        bool isJumping;
-        CharacterController controller;
-        PlayerInputHandler inputHandler;
+        [SerializeField]
+        private float gravity = -9.81f;
 
-        void Awake()
-        {
-            controller = GetComponent<CharacterController>();
-            inputHandler = GetComponent<PlayerInputHandler>();
-        }
+        [SerializeField]
+        private AnimationCurve accelerationCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        [SerializeField]
+        private float accelerationTime = 0.2f;
+
+        private Vector2 currentSpeed;
+        private Vector3 verticalVelocity;
 
         void Update()
         {
             Move();
-            Jump();
-            ApplyGravity();
         }
 
         void Move()
         {
-            Vector2 direction = inputHandler.GetMove();
-            Vector3 move = transform.right * direction.x + transform.forward * direction.y;
-            controller.Move(move * (speed * Time.deltaTime));
-        }
+            Vector2 targetSpeed = new Vector2(inputHandler.GetMove().x, inputHandler.GetMove().y) * moveSpeed;
+            currentSpeed = Vector2.Lerp(currentSpeed, targetSpeed, accelerationCurve.Evaluate(Time.deltaTime / accelerationTime));
+            Vector3 moveDirection = transform.forward * currentSpeed.y + transform.right * currentSpeed.x;
 
-        void Jump()
-        {
-            if (controller.isGrounded && isJumping)
+            if (controller.isGrounded && verticalVelocity.y < 0)
             {
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                isJumping = false;
+                verticalVelocity.y = -2f; // Small downward force when grounded to keep the player grounded
             }
-        }
+            else
+            {
+                // Only apply gravity if player is not grounded
+                verticalVelocity.y += gravity * Time.deltaTime;
+            }
 
-        void ApplyGravity()
-        {
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
-        }
-
-        public void OnJump()
-        {
-            isJumping = true;
+            moveDirection.y = verticalVelocity.y;
+            controller.Move(moveDirection * Time.deltaTime);
         }
     }
 }

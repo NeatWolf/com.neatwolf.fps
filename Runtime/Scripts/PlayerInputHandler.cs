@@ -8,6 +8,7 @@ namespace NeatWolf.FPS
         PlayerControls controls;
         Vector2 move;
         Vector2 look;
+        bool isCrouching;
 
         void Awake()
         {
@@ -18,6 +19,8 @@ namespace NeatWolf.FPS
 
             controls.Player.Look.performed += ctx => look = ctx.ReadValue<Vector2>();
             controls.Player.Look.canceled += ctx => look = Vector2.zero;
+
+            //controls.Player.Crouch.performed += ctx => isCrouching = !isCrouching;
         }
 
         void OnEnable()
@@ -38,6 +41,11 @@ namespace NeatWolf.FPS
         public Vector2 GetLook()
         {
             return look;
+        }
+
+        public bool GetCrouching()
+        {
+            return isCrouching;
         }
     }
 }
