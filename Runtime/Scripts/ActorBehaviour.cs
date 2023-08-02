@@ -11,12 +11,12 @@ namespace NeatWolf.FPS
         private void Awake()
         {
             actor = GetComponentInParent<Actor>();
-            inputHandler = actor.inputHandler;
             if(actor == null)
             {
                 Debug.LogError("ActorBehaviour requires an Actor component in its hierarchy.", this);
                 return;
             }
+            inputHandler = actor.inputHandler;
             OnActorAwake();
         }
 
