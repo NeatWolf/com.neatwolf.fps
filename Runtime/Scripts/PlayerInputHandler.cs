@@ -1,17 +1,16 @@
-
 using UnityEngine;
 
 namespace NeatWolf.FPS
 {
-    public class PlayerInputHandler : MonoBehaviour
+    public class PlayerInputHandler : ActorInputHandler
     {
         PlayerControls controls;
-        Vector2 move;
-        Vector2 look;
         bool isCrouching;
 
-        void Awake()
+        protected override void OnActorAwake()
         {
+            base.OnActorAwake();
+
             controls = new PlayerControls();
 
             controls.Player.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
@@ -31,16 +30,6 @@ namespace NeatWolf.FPS
         void OnDisable()
         {
             controls.Player.Disable();
-        }
-
-        public Vector2 GetMove()
-        {
-            return move;
-        }
-
-        public Vector2 GetLook()
-        {
-            return look;
         }
 
         public bool GetCrouching()
